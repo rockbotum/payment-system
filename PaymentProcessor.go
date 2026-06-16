@@ -23,7 +23,6 @@ func (p *DefaultPaymentProcessor) ProcessPayment(method PaymentMethod, amount de
 	success := true
 	if !method.Validate() {
 		success = false
-		return err
 	}
 	record := PaymentRecord{
 		ID:        (string)(len(p.history) + 1),
@@ -35,7 +34,7 @@ func (p *DefaultPaymentProcessor) ProcessPayment(method PaymentMethod, amount de
 		Timestamp: time.Now(),
 	}
 	p.history = append(p.history, record)
-	return nil
+	return err
 }
 
 func (p *DefaultPaymentProcessor) GetHistory() []PaymentRecord {
