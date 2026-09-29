@@ -1,6 +1,7 @@
 package paymentsystem
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/shopspring/decimal"
@@ -25,7 +26,7 @@ func (p *DefaultPaymentProcessor) ProcessPayment(method PaymentMethod, amount de
 		success = false
 	}
 	record := PaymentRecord{
-		ID:        (string)(len(p.history) + 1),
+		ID:        strconv.Itoa(len(p.history) + 1),
 		Method:    method.GetName(),
 		Amount:    amount,
 		Fee:       fee,

@@ -3,9 +3,13 @@ package paymentsystem
 import (
 	"fmt"
 	"regexp"
+	"strconv"
+	"time"
 
 	"github.com/shopspring/decimal"
 )
+
+var expiryDateRegexp = regexp.MustCompile(`^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/([0-9]{4})$`)
 
 type CreditCard struct {
 	number     string
@@ -31,18 +35,18 @@ func (c *CreditCard) GetFree(amount decimal.Decimal) decimal.Decimal {
 }
 
 func (c *CreditCard) Validate() bool {
-	if len(c.number) == 16 && regexp.MustCompile(`^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/([0-9]{4})$`).MatchString(c.expiryDate) {
-		matches := regexp.MustCompile(`^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/([0-9]{4})$`).FindStringSubmatch(c.expiryDate)
-		c.day = matches[1]
-		c.month = matches[2]
-		c.year = matches[3]
-		if c.year <= "2025" {
-			return false
-		} else {
-			return true
-		}
+	matches := expiryDateRegexp.FindStringSubmatch(c.expiryDate)
+	if len(c.number) != 16 || matches == nil {
+		return false
 	}
-	return false
+
+	c.day, c.month, c.year = matches[1], matches[2], matches[3]
+
+	year, err := strconv.Atoi(c.year)
+	if err != nil {
+		return false
+	}
+	return year > time.Now().Year()
 }
 
 func (c *CreditCard) Pay(amount decimal.Decimal) error {

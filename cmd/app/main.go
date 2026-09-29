@@ -12,7 +12,7 @@ func main() {
 	processor := paymentsystem.NewPaymentProcessor()
 
 	// Оплата кредитной картой
-	card := paymentsystem.NewCreditCard("1234567890123456", "12/2026")
+	card := paymentsystem.NewCreditCard("1234567890123456", "12/12/2027")
 	fmt.Printf("Оплата через %s\n", card.GetName())
 
 	err := processor.ProcessPayment(card, decimal.NewFromFloat(100.00))

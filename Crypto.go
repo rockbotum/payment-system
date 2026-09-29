@@ -33,11 +33,11 @@ func (c *Crypto) Validate() bool {
 	return false
 }
 
-func (c *Crypto) Pay(amount float64) error {
+func (c *Crypto) Pay(amount decimal.Decimal) error {
 	if !c.Validate() {
 		return fmt.Errorf("Invalid cryptocurrency wallet address")
 	} else {
-		fmt.Printf("Processing cryptocurrency payment of $%.2f\n", amount)
+		fmt.Printf("Processing cryptocurrency payment of $%v\n", amount)
 	}
 	return nil
 }

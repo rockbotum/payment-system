@@ -31,3 +31,13 @@ type PaymentRecord struct {
 	Success   bool
 	Timestamp time.Time
 }
+
+// Проверки на этапе компиляции: если реализация перестанет
+// удовлетворять интерфейсу, сборка упадёт.
+var (
+	_ PaymentMethod = (*CreditCard)(nil)
+	_ PaymentMethod = (*PayPal)(nil)
+	_ PaymentMethod = (*Crypto)(nil)
+
+	_ PaymentProcessor = (*DefaultPaymentProcessor)(nil)
+)
